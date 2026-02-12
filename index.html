@@ -302,12 +302,12 @@
             border-radius: 25px;
             font-size: 13px;
             font-weight: 600;
-            animation: swipeBounce 1s ease-in-out infinite;
+            animation: swipeRight 1s ease-in-out infinite;
         }
         
-        @keyframes swipeBounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-5px); }
+        @keyframes swipeRight {
+            0%, 100% { transform: translateX(-50%) translateX(0); }
+            50% { transform: translateX(-50%) translateX(20px); }
         }
         
         /* Progress indicator */
