@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Calculator body -->
+  <rect x="20" y="15" width="60" height="70" rx="10" fill="#0a0a0a" stroke="#22c55e" stroke-width="2"/>
+  
+  <!-- Screen -->
+  <rect x="28" y="22" width="44" height="20" rx="4" fill="#111"/>
+  
+  <!-- Screen text -->
+  <text x="65" y="37" font-family="monospace" font-size="14" fill="#22c55e" text-anchor="end" font-weight="bold">267</text>
+  
+  <!-- Camera lens on body -->
+  <circle cx="65" cy="55" r="8" fill="#1a1a1a" stroke="#22c55e" stroke-width="1.5"/>
+  
+  <!-- Camera lens inner -->
+  <circle cx="65" cy="55" r="4" fill="#22c55e" opacity="0.8"/>
+  
+  <!-- Flash -->
+  <circle cx="35" cy="55" r="4" fill="#ffffff" filter="url(#glow)"/>
+  
+  <!-- Calculator buttons row 1 -->
+  <rect x="28" y="65" width="12" height="8" rx="2" fill="#222"/>
+  <rect x="44" y="65" width="12" height="8" rx="2" fill="#222"/>
+  <rect x="60" y="65" width="12" height="8" rx="2" fill="#222"/>
+  
+  <!-- Calculator buttons row 2 -->
+  <rect x="28" y="76" width="12" height="8" rx="2" fill="#222"/>
+  <rect x="44" y="76" width="12" height="8" rx="2" fill="#222"/>
+  <rect x="60" y="76" width="12" height="8" rx="2" fill="#22c55e"/>
+</svg>
