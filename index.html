@@ -114,8 +114,10 @@
         /* App Demo Content */
         .app-header {
             padding: 20px 15px;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 10;
         }
         
         .app-label {
@@ -165,6 +167,7 @@
             background: 
                 radial-gradient(ellipse at 30% 20%, rgba(100, 100, 100, 0.3) 0%, transparent 50%),
                 radial-gradient(ellipse at 70% 80%, rgba(80, 80, 80, 0.3) 0%, transparent 50%);
+            z-index: 1;
         }
         
         .detection-box {
@@ -176,7 +179,10 @@
             box-shadow: 
                 0 0 20px var(--green-glow),
                 0 0 40px var(--green-glow);
-            animation: pulse 1.5s ease-in-out infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
         }
         
         .detection-number {
@@ -199,7 +205,7 @@
         
         .swipe-indicator {
             position: absolute;
-            bottom: 100px;
+            bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--green);
@@ -209,6 +215,7 @@
             font-size: 13px;
             font-weight: 600;
             animation: swipeRight 1s ease-in-out infinite;
+            z-index: 3;
         }
         
         @keyframes swipeRight {
@@ -218,12 +225,13 @@
         
         .progress-bar {
             position: absolute;
-            bottom: 60px;
-            left: 20px;
-            right: 20px;
+            bottom: 40px;
+            left: 30px;
+            right: 30px;
             height: 4px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 2px;
+            z-index: 2;
         }
         
         .progress-fill {
