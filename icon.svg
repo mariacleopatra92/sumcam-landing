@@ -1,39 +1,48 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+    <!-- Green glow filter -->
+    <filter id="greenGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge>
-        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    <!-- Subtle inner shadow for depth -->
+    <filter id="innerShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feOffset dx="0" dy="1"/>
+      <feGaussianBlur stdDeviation="1" result="offset-blur"/>
+      <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
+      <feFlood flood-color="#000" flood-opacity="0.3" result="color"/>
+      <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
+      <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+    </filter>
   </defs>
   
-  <!-- Calculator body -->
-  <rect x="20" y="15" width="60" height="70" rx="10" fill="#0a0a0a" stroke="#22c55e" stroke-width="2"/>
+  <!-- Dark background -->
+  <rect width="100" height="100" rx="18" fill="#0a0a0a"/>
   
-  <!-- Screen -->
-  <rect x="28" y="22" width="44" height="20" rx="4" fill="#111"/>
+  <!-- Camera viewfinder frame - top left -->
+  <path d="M 20 32 L 20 20 L 32 20" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" filter="url(#greenGlow)"/>
   
-  <!-- Screen text -->
-  <text x="65" y="37" font-family="monospace" font-size="14" fill="#22c55e" text-anchor="end" font-weight="bold">267</text>
+  <!-- Camera viewfinder frame - top right -->
+  <path d="M 68 20 L 80 20 L 80 32" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" filter="url(#greenGlow)"/>
   
-  <!-- Camera lens on body -->
-  <circle cx="65" cy="55" r="8" fill="#1a1a1a" stroke="#22c55e" stroke-width="1.5"/>
+  <!-- Camera viewfinder frame - bottom left -->
+  <path d="M 20 68 L 20 80 L 32 80" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" filter="url(#greenGlow)"/>
   
-  <!-- Camera lens inner -->
-  <circle cx="65" cy="55" r="4" fill="#22c55e" opacity="0.8"/>
+  <!-- Camera viewfinder frame - bottom right -->
+  <path d="M 68 80 L 80 80 L 80 68" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" filter="url(#greenGlow)"/>
   
-  <!-- Flash -->
-  <circle cx="35" cy="55" r="4" fill="#ffffff" filter="url(#glow)"/>
+  <!-- Number display box -->
+  <rect x="28" y="42" width="44" height="24" rx="6" fill="#111" stroke="#22c55e" stroke-width="1.5"/>
   
-  <!-- Calculator buttons row 1 -->
-  <rect x="28" y="65" width="12" height="8" rx="2" fill="#222"/>
-  <rect x="44" y="65" width="12" height="8" rx="2" fill="#222"/>
-  <rect x="60" y="65" width="12" height="8" rx="2" fill="#222"/>
+  <!-- Number being detected -->
+  <text x="50" y="60" font-family="-apple-system, BlinkMacSystemFont, monospace" font-size="18" fill="#22c55e" text-anchor="middle" font-weight="600" filter="url(#greenGlow)">45</text>
   
-  <!-- Calculator buttons row 2 -->
-  <rect x="28" y="76" width="12" height="8" rx="2" fill="#222"/>
-  <rect x="44" y="76" width="12" height="8" rx="2" fill="#222"/>
-  <rect x="60" y="76" width="12" height="8" rx="2" fill="#22c55e"/>
+  <!-- Scan line indicator below -->
+  <rect x="35" y="70" width="30" height="3" rx="1.5" fill="#22c55e" opacity="0.6"/>
+  
+  <!-- Subtle grid overlay (camera feel) -->
+  <path d="M 50 22 L 50 78 M 22 50 L 78 50" stroke="#22c55e" stroke-width="0.5" opacity="0.15"/>
 </svg>
