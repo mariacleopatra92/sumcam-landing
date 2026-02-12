@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SumCam - The Calculator That Sees</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        /* Blurry warehouse background */
+        .warehouse-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(100, 100, 150, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(80, 120, 100, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(60, 80, 100, 0.2) 0%, transparent 70%);
+            z-index: 0;
+            filter: blur(30px);
+            pointer-events: none;
+        }
+        
+        /* Warehouse silhouette hints */
+        .warehouse-hints {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        
+        .warehouse-hints::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 200px;
+            height: 300px;
+            background: #2a3a4a;
+            border-radius: 20px;
+            transform: rotate(-5deg);
+        }
+        
+        .warehouse-hints::after {
+            content: '';
+            position: absolute;
+            bottom: 15%;
+            right: 15%;
+            width: 250px;
+            height: 200px;
+            background: #2a3a4a;
+            border-radius: 15px;
+            transform: rotate(8deg);
+        }
+        
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 1200px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+        
+        .tagline {
+            font-size: 20px;
+            color: #94a3b8;
+            margin-bottom: 60px;
+        }
+        
+        /* Phone Frame */
+        .phone-frame {
+            position: relative;
+            width: 320px;
+            height: 650px;
+            background: #0a0a0a;
+            border-radius: 50px;
+            padding: 15px;
+            box-shadow: 
+                0 0 0 4px #1a1a1a,
+                0 0 0 8px #2a2a2a,
+                0 50px 100px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(37, 99, 235, 0.2);
+            margin: 0 auto 60px;
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 35px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Video placeholder - POV warehouse scan */
+        .app-video {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: linear-gradient(180deg, #3d4a5c 0%, #2d3a4a 100%);
+        }
+        
+        /* Simulated warehouse POV blur */
+        .warehouse-pov {
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 30%, rgba(80, 100, 120, 0.5) 0%, transparent 40%),
+                radial-gradient(ellipse at 20% 70%, rgba(60, 80, 100, 0.4) 0%, transparent 30%),
+                radial-gradient(ellipse at 80% 60%, rgba(70, 90, 110, 0.4) 0%, transparent 35%);
+            animation: warehouseBlur 8s ease-in-out infinite;
+        }
+        
+        @keyframes warehouseBlur {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-5px) translateY(3px); }
+            50% { transform: translateX(3px) translateY(-3px); }
+            75% { transform: translateX(-3px) translateY(2px); }
+        }
+        
+        /* Blurry box outlines */
+        .box-blur-1 {
+            position: absolute;
+            top: 25%;
+            left: 20%;
+            width: 80px;
+            height: 60px;
+            background: rgba(100, 120, 140, 0.4);
+            border-radius: 8px;
+            filter: blur(15px);
+            animation: boxMove 6s ease-in-out infinite;
+        }
+        
+        .box-blur-2 {
+            position: absolute;
+            top: 45%;
+            right: 25%;
+            width: 90px;
+            height: 55px;
+            background: rgba(90, 110, 130, 0.4);
+            border-radius: 8px;
+            filter: blur(12px);
+            animation: boxMove 6s ease-in-out infinite 1s;
+        }
+        
+        .box-blur-3 {
+            position: absolute;
+            bottom: 30%;
+            left: 30%;
+            width: 70px;
+            height: 50px;
+            background: rgba(80, 100, 120, 0.35);
+            border-radius: 6px;
+            filter: blur(10px);
+            animation: boxMove 6s ease-in-out infinite 2s;
+        }
+        
+        @keyframes boxMove {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        
+        /* App UI overlay on phone */
+        .app-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        /* Floating overlay showing scan */
+        .floating-overlay {
+            position: absolute;
+            top: 20px;
+            left: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .total-display {
+            font-size: 28px;
+            font-weight: 700;
+            color: #22c55e;
+            margin-bottom: 8px;
+        }
+        
+        .total-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .scanned-numbers {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .scanned-number {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Camera detection glow effect */
+        .detection-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 40px;
+            border: 3px solid #22c55e;
+            border-radius: 8px;
+            box-shadow: 
+                0 0 20px rgba(34, 197, 94, 0.8),
+                0 0 40px rgba(34, 197, 94, 0.4);
+            animation: glowPulse 1.5s ease-in-out infinite;
+        }
+        
+        .detected-number {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #22c55e;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 20px rgba(34, 197, 94, 0.8), 0 0 40px rgba(34, 197, 94, 0.4); }
+            50% { opacity: 0.8; box-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 0 60px rgba(34, 197, 94, 0.3); }
+        }
+        
+        /* Swipe hint */
+        .swipe-hint {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(34, 197, 94, 0.9);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            animation: swipeBounce 1s ease-in-out infinite;
+        }
+        
+        @keyframes swipeBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+        
+        /* Progress indicator */
+        .progress-bar {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+            width: 65%;
+            border-radius: 3px;
+            animation: progressMove 2s ease-in-out infinite;
+        }
+        
+        @keyframes progressMove {
+            0%, 100% { width: 60%; }
+            50% { width: 70%; }
+        }
+        
+        .progress-text {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #64748b;
+        }
+        
+        /* Phone notch */
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 30px;
+            background: #0a0a0a;
+            border-radius: 0 0 20px 20px;
+            z-index: 5;
+        }
+        
+        /* Value prop */
+        .value-prop {
+            margin-bottom: 40px;
+        }
+        
+        .headline {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .headline span {
+            background: linear-gradient(135deg, #22c55e, #4ade80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subheadline {
+            font-size: 18px;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(34, 197, 94, 0.4);
+        }
+        
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 80px;
+            max-width: 900px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+        }
+        
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .feature-desc {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        /* Video placeholder notice */
+        .video-notice {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #fbbf24;
+        }
+        
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .headline {
+                font-size: 32px;
+            }
+            
+            .phone-frame {
+                width: 280px;
+                height: 570px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="warehouse-bg"></div>
+    <div class="warehouse-hints"></div>
+    
+    <section class="hero">
+        <div class="content">
+            <div class="logo">
+                <div class="logo-icon">📱</div>
+                SumCam
+            </div>
+            <p class="tagline">The Calculator That Sees</p>
+            
+            <div class="video-notice">
+                🎬 Video placeholder - This needs to be generated with video AI (Runway, Pika, or similar)
+            </div>
+            
+            <div class="phone-frame">
+                <div class="phone-screen">
+                    <div class="phone-notch"></div>
+                    
+                    <!-- Simulated warehouse POV video -->
+                    <div class="app-video">
+                        <div class="warehouse-pov"></div>
+                        <div class="box-blur-1"></div>
+                        <div class="box-blur-2"></div>
+                        <div class="box-blur-3"></div>
+                        
+                        <!-- App UI overlay -->
+                        <div class="app-ui">
+                            <div class="floating-overlay">
+                                <div class="total-label">Total Weight</div>
+                                <div class="total-display">267 lbs</div>
+                                <div class="scanned-numbers">
+                                    <span class="scanned-number">45</span>
+                                    <span class="scanned-number">32</span>
+                                    <span class="scanned-number">67</span>
+                                    <span class="scanned-number">28</span>
+                                    <span class="scanned-number">51</span>
+                                    <span class="scanned-number">44</span>
+                                </div>
+                            </div>
+                            
+                            <div class="detection-glow">
+                                <span class="detected-number">45</span>
+                            </div>
+                            
+                            <div class="swipe-hint">⟵ Swipe right to add</div>
+                            
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <div class="progress-text">Scanning Box 32 of 50</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="value-prop">
+                <h1 class="headline">
+                    Point at numbers.<br>
+                    <span>Swipe. Done.</span>
+                </h1>
+                <p class="subheadline">
+                    Skip the typing. Walk around, scan labels, swipe to add. 
+                    The fastest way to total up boxes, weights, receipts—anything with numbers.
+                </p>
+                <a href="#" class="cta-button">
+                    Get Early Access
+                </a>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-desc">3 seconds per box. Faster than typing. No fat-finger errors.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">100% Private</h3>
+                    <p class="feature-desc">All processing on your device. No data sent to servers.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Export Anywhere</h3>
+                    <p class="feature-desc">CSV, PDF, SMS, Email. Works offline in any warehouse.</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>© 2026 SumCam. All rights reserved.</p>
+                <p style="margin-top: 10px;">Coming soon to iOS App Store</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
