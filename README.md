@@ -1,12 +1,13 @@
 # SumCam Landing Page
 
-## Quick Deploy to Webflow
+## Quick Deploy to GitHub Pages
 
-1. Go to https://webflow.com
-2. Sign up / Log in
-3. Click "New Site" → "Start from Scratch"
-4. Copy content from index.html into Webflow Designer
-5. Publish to sumcam.app domain (or your custom domain)
+This landing page is hosted on GitHub Pages at https://sumcam.app
+
+**To update:**
+1. Edit index.html locally
+2. Push changes to main branch
+3. GitHub Actions automatically deploys
 
 ## Assets Needed
 
@@ -49,4 +50,4 @@ Duration: 10-15 seconds. No audio or voiceover.
 - This is a static HTML/CSS landing page
 - Fully responsive
 - No external dependencies (all CSS inline)
-- Ready for Webflow import or static hosting
+- Hosted on GitHub Pages (free)
