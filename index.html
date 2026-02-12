@@ -7,297 +7,203 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        :root {
+            --green: #22c55e;
+            --green-dim: #15803d;
+            --green-glow: rgba(34, 197, 94, 0.4);
+            --black: #0a0a0a;
+            --dark: #111111;
+            --gray: #1a1a1a;
+            --white: #ffffff;
+            --text-gray: #888888;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: var(--black);
+            color: var(--white);
             min-height: 100vh;
-            color: white;
             overflow-x: hidden;
         }
         
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            position: relative;
-        }
-        
-        /* Blurry warehouse background */
-        .warehouse-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 30% 20%, rgba(100, 100, 150, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(80, 120, 100, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(60, 80, 100, 0.2) 0%, transparent 70%);
-            z-index: 0;
-            filter: blur(30px);
-            pointer-events: none;
-        }
-        
-        /* Warehouse silhouette hints */
-        .warehouse-hints {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.4;
-        }
-        
-        .warehouse-hints::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 200px;
-            height: 300px;
-            background: #2a3a4a;
-            border-radius: 20px;
-            transform: rotate(-5deg);
-        }
-        
-        .warehouse-hints::after {
-            content: '';
-            position: absolute;
-            bottom: 15%;
-            right: 15%;
-            width: 250px;
-            height: 200px;
-            background: #2a3a4a;
-            border-radius: 15px;
-            transform: rotate(8deg);
-        }
-        
-        .content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
+        .container {
             max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
         }
         
         .logo {
-            font-size: 48px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
+            gap: 10px;
         }
         
         .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            border-radius: 15px;
+            width: 40px;
+            height: 40px;
+            background: var(--green);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
+            font-size: 20px;
+        }
+        
+        /* Hero */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+        
+        h1 span {
+            color: var(--green);
         }
         
         .tagline {
-            font-size: 20px;
-            color: #94a3b8;
+            font-size: 22px;
+            color: var(--text-gray);
+            margin-bottom: 60px;
+            max-width: 600px;
+        }
+        
+        /* Phone Demo */
+        .phone-wrapper {
             margin-bottom: 60px;
         }
         
-        /* Phone Frame */
         .phone-frame {
-            position: relative;
-            width: 320px;
-            height: 650px;
-            background: #0a0a0a;
-            border-radius: 50px;
-            padding: 15px;
+            width: 300px;
+            height: 600px;
+            background: var(--dark);
+            border-radius: 40px;
+            padding: 12px;
             box-shadow: 
-                0 0 0 4px #1a1a1a,
-                0 0 0 8px #2a2a2a,
-                0 50px 100px rgba(0, 0, 0, 0.5),
-                0 0 80px rgba(37, 99, 235, 0.2);
-            margin: 0 auto 60px;
+                0 0 0 3px #222,
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                0 0 60px var(--green-glow);
         }
         
         .phone-screen {
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 35px;
+            background: var(--gray);
+            border-radius: 30px;
             overflow: hidden;
             position: relative;
         }
         
-        /* Video placeholder - POV warehouse scan */
-        .app-video {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            background: linear-gradient(180deg, #3d4a5c 0%, #2d3a4a 100%);
-        }
-        
-        /* Simulated warehouse POV blur */
-        .warehouse-pov {
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 50% 30%, rgba(80, 100, 120, 0.5) 0%, transparent 40%),
-                radial-gradient(ellipse at 20% 70%, rgba(60, 80, 100, 0.4) 0%, transparent 30%),
-                radial-gradient(ellipse at 80% 60%, rgba(70, 90, 110, 0.4) 0%, transparent 35%);
-            animation: warehouseBlur 8s ease-in-out infinite;
-        }
-        
-        @keyframes warehouseBlur {
-            0%, 100% { transform: translateX(0) translateY(0); }
-            25% { transform: translateX(-5px) translateY(3px); }
-            50% { transform: translateX(3px) translateY(-3px); }
-            75% { transform: translateX(-3px) translateY(2px); }
-        }
-        
-        /* Blurry box outlines */
-        .box-blur-1 {
-            position: absolute;
-            top: 25%;
-            left: 20%;
-            width: 80px;
-            height: 60px;
-            background: rgba(100, 120, 140, 0.4);
-            border-radius: 8px;
-            filter: blur(15px);
-            animation: boxMove 6s ease-in-out infinite;
-        }
-        
-        .box-blur-2 {
-            position: absolute;
-            top: 45%;
-            right: 25%;
-            width: 90px;
-            height: 55px;
-            background: rgba(90, 110, 130, 0.4);
-            border-radius: 8px;
-            filter: blur(12px);
-            animation: boxMove 6s ease-in-out infinite 1s;
-        }
-        
-        .box-blur-3 {
-            position: absolute;
-            bottom: 30%;
-            left: 30%;
-            width: 70px;
-            height: 50px;
-            background: rgba(80, 100, 120, 0.35);
-            border-radius: 6px;
-            filter: blur(10px);
-            animation: boxMove 6s ease-in-out infinite 2s;
-        }
-        
-        @keyframes boxMove {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
-        }
-        
-        /* App UI overlay on phone */
-        .app-ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        
-        /* Floating overlay showing scan */
-        .floating-overlay {
-            position: absolute;
-            top: 20px;
-            left: 15px;
-            right: 15px;
+        /* App Demo Content */
+        .app-header {
+            padding: 20px 15px;
             background: rgba(0, 0, 0, 0.8);
-            border-radius: 15px;
-            padding: 15px;
             backdrop-filter: blur(10px);
         }
         
-        .total-display {
-            font-size: 28px;
-            font-weight: 700;
-            color: #22c55e;
-            margin-bottom: 8px;
-        }
-        
-        .total-label {
+        .app-label {
             font-size: 11px;
-            color: #64748b;
+            color: var(--text-gray);
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 5px;
         }
         
-        .scanned-numbers {
+        .app-total {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--green);
+        }
+        
+        .app-numbers {
             display: flex;
             gap: 8px;
+            margin-top: 12px;
             flex-wrap: wrap;
-            margin-top: 10px;
         }
         
-        .scanned-number {
+        .app-number {
             background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
-            padding: 4px 10px;
-            border-radius: 12px;
+            color: var(--green);
+            padding: 4px 12px;
+            border-radius: 15px;
             font-size: 14px;
             font-weight: 600;
         }
         
-        /* Camera detection glow effect */
-        .detection-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px;
-            height: 40px;
-            border: 3px solid #22c55e;
-            border-radius: 8px;
-            box-shadow: 
-                0 0 20px rgba(34, 197, 94, 0.8),
-                0 0 40px rgba(34, 197, 94, 0.4);
-            animation: glowPulse 1.5s ease-in-out infinite;
+        .app-camera {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
         }
         
-        .detected-number {
+        .warehouse-blur {
             position: absolute;
-            top: -25px;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(100, 100, 100, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(80, 80, 80, 0.3) 0%, transparent 50%);
+        }
+        
+        .detection-box {
+            position: absolute;
+            width: 90px;
+            height: 35px;
+            border: 3px solid var(--green);
+            border-radius: 8px;
+            box-shadow: 
+                0 0 20px var(--green-glow),
+                0 0 40px var(--green-glow);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .detection-number {
+            position: absolute;
+            top: -28px;
             left: 50%;
             transform: translateX(-50%);
-            background: #22c55e;
-            color: white;
-            padding: 3px 12px;
-            border-radius: 10px;
+            background: var(--green);
+            color: var(--black);
+            padding: 3px 10px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 700;
         }
         
-        @keyframes glowPulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 20px rgba(34, 197, 94, 0.8), 0 0 40px rgba(34, 197, 94, 0.4); }
-            50% { opacity: 0.8; box-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 0 60px rgba(34, 197, 94, 0.3); }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 20px var(--green-glow), 0 0 40px var(--green-glow); }
+            50% { opacity: 0.8; box-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); }
         }
         
-        /* Swipe hint */
-        .swipe-hint {
+        .swipe-indicator {
             position: absolute;
-            bottom: 80px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(34, 197, 94, 0.9);
-            color: white;
+            background: var(--green);
+            color: var(--black);
             padding: 10px 25px;
             border-radius: 25px;
             font-size: 13px;
@@ -307,26 +213,24 @@
         
         @keyframes swipeRight {
             0%, 100% { transform: translateX(-50%) translateX(0); }
-            50% { transform: translateX(-50%) translateX(20px); }
+            50% { transform: translateX(-50%) translateX(15px); }
         }
         
-        /* Progress indicator */
         .progress-bar {
             position: absolute;
-            bottom: 30px;
+            bottom: 60px;
             left: 20px;
             right: 20px;
-            height: 6px;
+            height: 4px;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
+            border-radius: 2px;
         }
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #22c55e, #4ade80);
+            background: var(--green);
+            border-radius: 2px;
             width: 65%;
-            border-radius: 3px;
             animation: progressMove 2s ease-in-out infinite;
         }
         
@@ -335,97 +239,60 @@
             50% { width: 70%; }
         }
         
-        .progress-text {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px;
-            color: #64748b;
-        }
-        
-        /* Phone notch */
-        .phone-notch {
+        .app-notch {
             position: absolute;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 30px;
-            background: #0a0a0a;
+            width: 100px;
+            height: 28px;
+            background: var(--black);
             border-radius: 0 0 20px 20px;
-            z-index: 5;
         }
         
-        /* Value prop */
-        .value-prop {
-            margin-bottom: 40px;
+        /* CTA */
+        .cta {
+            margin-bottom: 80px;
         }
         
-        .headline {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-        
-        .headline span {
-            background: linear-gradient(135deg, #22c55e, #4ade80);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subheadline {
-            font-size: 18px;
-            color: #94a3b8;
-            max-width: 600px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
-        }
-        
-        /* CTA Button */
         .cta-button {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: white;
-            padding: 18px 40px;
-            border-radius: 50px;
+            background: var(--green);
+            color: var(--black);
+            padding: 18px 45px;
+            border-radius: 30px;
             font-size: 18px;
             font-weight: 600;
             text-decoration: none;
             transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3);
+            box-shadow: 0 10px 40px var(--green-glow);
         }
         
         .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 50px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 15px 50px var(--green-glow);
         }
         
         /* Features */
         .features {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 80px;
+            gap: 40px;
             max-width: 900px;
+            margin: 0 auto;
         }
         
         .feature {
             text-align: center;
-            padding: 30px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
         }
         
         .feature-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            background: var(--gray);
             border-radius: 15px;
             display: flex;
             align-items: center;
@@ -434,120 +301,82 @@
             font-size: 28px;
         }
         
-        .feature-title {
-            font-size: 18px;
-            font-weight: 600;
+        .feature h3 {
+            font-size: 20px;
             margin-bottom: 10px;
         }
         
-        .feature-desc {
-            font-size: 14px;
-            color: #94a3b8;
+        .feature p {
+            color: var(--text-gray);
+            font-size: 15px;
             line-height: 1.5;
         }
         
         /* Footer */
-        .footer {
-            margin-top: 80px;
-            padding-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #64748b;
+        footer {
+            text-align: center;
+            padding-top: 60px;
+            border-top: 1px solid #222;
+            margin-top: 60px;
+            color: var(--text-gray);
             font-size: 14px;
         }
         
-        /* Video placeholder notice */
-        .video-notice {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            border-radius: 10px;
-            padding: 15px 20px;
-            margin-bottom: 30px;
-            font-size: 14px;
-            color: #fbbf24;
-        }
-        
+        /* Responsive */
         @media (max-width: 768px) {
-            .features {
-                grid-template-columns: 1fr;
-            }
-            
-            .headline {
-                font-size: 32px;
-            }
-            
-            .phone-frame {
-                width: 280px;
-                height: 570px;
-            }
+            h1 { font-size: 38px; }
+            .tagline { font-size: 18px; }
+            .features { grid-template-columns: 1fr; }
+            .phone-frame { width: 260px; height: 520px; }
         }
     </style>
 </head>
 <body>
-    <div class="warehouse-bg"></div>
-    <div class="warehouse-hints"></div>
-    
-    <section class="hero">
-        <div class="content">
+    <div class="container">
+        <header>
             <div class="logo">
                 <div class="logo-icon">📱</div>
                 SumCam
             </div>
-            <p class="tagline">The Calculator That Sees</p>
+        </header>
+        
+        <section class="hero">
+            <h1>Point at numbers.<br><span>Swipe. Done.</span></h1>
+            <p class="tagline">The fastest way to add up boxes, weights, receipts—anything with numbers. No typing. No errors.</p>
             
-            <div class="video-notice">
-                🎬 Video placeholder - This needs to be generated with video AI (Runway, Pika, or similar)
-            </div>
-            
-            <div class="phone-frame">
-                <div class="phone-screen">
-                    <div class="phone-notch"></div>
-                    
-                    <!-- Simulated warehouse POV video -->
-                    <div class="app-video">
-                        <div class="warehouse-pov"></div>
-                        <div class="box-blur-1"></div>
-                        <div class="box-blur-2"></div>
-                        <div class="box-blur-3"></div>
+            <div class="phone-wrapper">
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="app-notch"></div>
                         
-                        <!-- App UI overlay -->
-                        <div class="app-ui">
-                            <div class="floating-overlay">
-                                <div class="total-label">Total Weight</div>
-                                <div class="total-display">267 lbs</div>
-                                <div class="scanned-numbers">
-                                    <span class="scanned-number">45</span>
-                                    <span class="scanned-number">32</span>
-                                    <span class="scanned-number">67</span>
-                                    <span class="scanned-number">28</span>
-                                    <span class="scanned-number">51</span>
-                                    <span class="scanned-number">44</span>
-                                </div>
+                        <div class="app-header">
+                            <div class="app-label">Total Weight</div>
+                            <div class="app-total">267 lbs</div>
+                            <div class="app-numbers">
+                                <span class="app-number">45</span>
+                                <span class="app-number">32</span>
+                                <span class="app-number">67</span>
+                                <span class="app-number">28</span>
+                                <span class="app-number">51</span>
+                                <span class="app-number">44</span>
                             </div>
-                            
-                            <div class="detection-glow">
-                                <span class="detected-number">45</span>
+                        </div>
+                        
+                        <div class="app-camera">
+                            <div class="warehouse-blur"></div>
+                            <div class="detection-box">
+                                <span class="detection-number">45</span>
                             </div>
-                            
-                            <div class="swipe-hint">⟶ Swipe right to add</div>
-                            
+                            <div class="swipe-indicator">⟶ Swipe right to add</div>
                             <div class="progress-bar">
                                 <div class="progress-fill"></div>
                             </div>
-                            <div class="progress-text">Scanning Box 32 of 50</div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="value-prop">
-                <h1 class="headline">
-                    Point at numbers.<br>
-                    <span>Swipe. Done.</span>
-                </h1>
-                <p class="subheadline">
-                    Skip the typing. Walk around, scan labels, swipe to add. 
-                    The fastest way to total up boxes, weights, receipts—anything with numbers.
-                </p>
+            <div class="cta">
                 <a href="#" class="cta-button">
                     Get Early Access
                 </a>
@@ -556,26 +385,37 @@
             <div class="features">
                 <div class="feature">
                     <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title">Lightning Fast</h3>
-                    <p class="feature-desc">3 seconds per box. Faster than typing. No fat-finger errors.</p>
+                    <h3>Lightning Fast</h3>
+                    <p>3 seconds per box. Faster than typing. No fat-finger mistakes.</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🔒</div>
-                    <h3 class="feature-title">100% Private</h3>
-                    <p class="feature-desc">All processing on your device. No data sent to servers.</p>
+                    <h3>100% Private</h3>
+                    <p>All processing on your device. No data ever leaves your phone.</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">📊</div>
-                    <h3 class="feature-title">Export Anywhere</h3>
-                    <p class="feature-desc">CSV, PDF, SMS, Email. Works offline in any warehouse.</p>
+                    <h3>Export Anywhere</h3>
+                    <p>CSV, PDF, SMS, Email. Works offline in any warehouse.</p>
                 </div>
             </div>
-            
-            <div class="footer">
-                <p>© 2026 SumCam. All rights reserved.</p>
-                <p style="margin-top: 10px;">Coming soon to iOS App Store</p>
-            </div>
-        </div>
-    </section>
+        </section>
+        
+        <footer>
+            <p>© 2026 SumCam. Coming soon to iOS.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Smooth scroll for any anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
